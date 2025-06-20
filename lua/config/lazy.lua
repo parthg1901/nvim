@@ -19,7 +19,6 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { "folke/neoconf.nvim", cmd = "Neoconf" },
-    "folke/neodev.nvim",
     -- import/override with your plugins
     { import = "plugins" },
   },

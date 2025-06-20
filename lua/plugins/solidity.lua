@@ -28,23 +28,57 @@ local config = function()
         formatStdin = true
     }
 
+    -- EFM for Solidity
     lspconfig.efm.setup({
         filetypes = {"solidity"},
         on_attach = on_attach,
         root_dir = lspconfig.util.root_pattern("hardhat.config.*", "foundry.toml", "remappings.txt", ".git"),
-        init_options = {documentFormatting = true, codeAction = true},
+        init_options = {
+            documentFormatting = true,
+            codeAction = true
+        },
         settings = {
             languages = {
-                solidity = {{ -- solidity could have more than one linter, hence this nesting.
-                    lintStdin = true, -- pipe buffer content to solhint
-                    lintIgnoreExitCode = true, -- because exit code 1 is common
-                    lintCommand = "solhint stdin", -- default format stylish
-                    lintFormats = {" %#%l:%c %#%tarning %#%m", " %#%l:%c %#%trror %#%m" -- solhint only has error and warn 
-                    },
+                solidity = {{
+                    lintStdin = true,
+                    lintIgnoreExitCode = true,
+                    lintCommand = "solhint stdin",
+                    lintFormats = {" %#%l:%c %#%tarning %#%m", " %#%l:%c %#%trror %#%m"},
                     lintSource = "solhint"
-                }, {
-                    forge_fmt -- forge formatter
-                }}
+                }, forge_fmt}
+            }
+        }
+    })
+
+    -- Lua LSP
+    lspconfig.lua_ls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+            Lua = {
+                workspace = {
+                    checkThirdParty = false
+                },
+                telemetry = {
+                    enable = false
+                },
+                diagnostics = {
+                    globals = {"vim"}
+                }
+            }
+        }
+    })
+
+    -- JSON LSP
+    lspconfig.jsonls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+            json = {
+                schemas = require("schemastore").json.schemas(),
+                validate = {
+                    enable = true
+                }
             }
         }
     })
@@ -64,6 +98,6 @@ return {
     "neovim/nvim-lspconfig",
     config = config,
     lazy = false,
-    dependencies = {"williamboman/mason.nvim", "creativenull/efmls-configs-nvim", -- only needed if you still use other formatters/linters from it
-                    "hrsh7th/cmp-nvim-lsp"}
+    dependencies = {"williamboman/mason.nvim", "creativenull/efmls-configs-nvim", -- only needed if using EFM formatters
+                    "hrsh7th/cmp-nvim-lsp", "b0o/schemastore.nvim"}
 }
