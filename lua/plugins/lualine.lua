@@ -95,8 +95,10 @@ return {
         },
         lualine_z = {
           function()
-            local song = require("music-player").get_now_playing()
-            return song ~= "" and song or ""
+            local ok, mp = pcall(require, "music-player")
+            local song = (ok and mp.get_now_playing()) or ""
+            local count = require("counter").get()
+            return song ~= "" and (song .. " | #" .. count) or "#" .. count
           end,
           function()
             return " " .. os.date("%R")
