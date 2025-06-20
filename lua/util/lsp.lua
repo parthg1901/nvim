@@ -29,6 +29,54 @@ M.on_attach = function(client, bufnr)
 	if client.name == "ts_ls" then
 		mapkey("<leader>oi", "TypeScriptOrganizeImports", "n", opts) -- organise imports
 	end
+
+	if client.name == "vtsls" then
+		-- TypeScript/JavaScript specific keymaps for vtsls
+		-- Use vim.keymap.set directly for function callbacks
+		vim.keymap.set("n", "gD", function()
+			local params = vim.lsp.util.make_position_params()
+			vim.lsp.buf.execute_command({
+				command = "typescript.goToSourceDefinition",
+				arguments = { params.textDocument.uri, params.position },
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Go to Source Definition" })
+		
+		vim.keymap.set("n", "gR", function()
+			vim.lsp.buf.execute_command({
+				command = "typescript.findAllFileReferences",
+				arguments = { vim.uri_from_bufnr(0) },
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "File References" })
+		
+		vim.keymap.set("n", "<leader>co", function()
+			vim.lsp.buf.execute_command({
+				command = "typescript.organizeImports",
+				arguments = { vim.uri_from_bufnr(0) },
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Organize Imports" })
+		
+		vim.keymap.set("n", "<leader>cM", function()
+			vim.lsp.buf.execute_command({
+				command = "typescript.addMissingImports",
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Add missing imports" })
+		
+		vim.keymap.set("n", "<leader>cu", function()
+			vim.lsp.buf.execute_command({
+				command = "typescript.removeUnused",
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Remove unused imports" })
+		
+		vim.keymap.set("n", "<leader>cD", function()
+			vim.lsp.buf.execute_command({
+				command = "typescript.fixAll",
+			})
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Fix all diagnostics" })
+		
+		vim.keymap.set("n", "<leader>cV", function()
+			vim.lsp.buf.execute_command({ command = "typescript.selectTypeScriptVersion" })
+		end, { noremap = true, silent = true, buffer = bufnr, desc = "Select TS workspace version" })
+	end
 end
 
 M.typescript_organise_imports = {
