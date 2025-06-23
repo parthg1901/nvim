@@ -6,3 +6,5 @@ vim.schedule(function()
   vim.ui.input = require("snacks.input").input
   vim.ui.select = require("snacks.picker").select
 end)
+vim.opt.swapfile = false
+

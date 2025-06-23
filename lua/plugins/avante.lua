@@ -9,13 +9,13 @@ return {
     -- for example
     provider = "copilot",
     providers = {
-        copilot = {
-            endpoint = "https://api.githubcopilot.com",
-            model = "gemini-2.5-pro-preview-06-05",
-            proxy = nil, -- [protocol://]host[:port] Use this proxy
-            allow_insecure = false, -- Allow insecure server connections
-            timeout = 30000, -- Timeout in milliseconds
-        },
+      copilot = {
+        endpoint = "https://api.githubcopilot.com",
+        model = "gpt-4.1-2025-04-14",
+        proxy = nil, -- [protocol://]host[:port] Use this proxy
+        allow_insecure = false, -- Allow insecure server connections
+        timeout = 30000, -- Timeout in milliseconds
+      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -53,7 +53,7 @@ return {
     },
     {
       -- Make sure to set this up properly if you have lazy=true
-      'MeanderingProgrammer/render-markdown.nvim',
+      "MeanderingProgrammer/render-markdown.nvim",
       opts = {
         file_types = { "markdown", "Avante" },
       },
@@ -61,3 +61,4 @@ return {
     },
   },
 }
+
